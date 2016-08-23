@@ -9,6 +9,8 @@ parser.add_option("-f", "--file", dest="filename",
 parser.add_option("-d", "--data", type=str, dest="fields", help="data fields to extract i.e. 2,3,4")
 parser.add_option("-l", "--loss", type=str, dest="loss",
                   help="percentage of data to loose per output field, i.e. 50,20,90")
+parser.add_option("-s", "--split", type=str, dest="split",default=",",
+                  help="split data using what field i.e , - \t etc")
 (options, args) = parser.parse_args()
 loss = [int(a) for a in options.loss.split(',')]
 fields = [int(a) for a in options.fields.split(',')]
@@ -22,10 +24,10 @@ try:
         new_line = ''
         for wanted in fields:
             data = data_line[wanted -1]
-            rnd = random.random()
+            rnd = random.randint(0,100)
             if pos > 0:
-                new_line += ","
-            if rnd*100 < loss[pos] or first_line:
+                new_line += options.split
+            if rnd > loss[pos] or first_line:
                 new_line += data
             pos += 1
         print(""+new_line)
